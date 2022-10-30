@@ -522,6 +522,7 @@ build.json @home-assistant/supervisor
 /tests/components/ign_sismologia/ @exxamalte
 /homeassistant/components/image/ @home-assistant/core
 /tests/components/image/ @home-assistant/core
+/homeassistant/components/image_annotation/ @eddiewebb
 /homeassistant/components/image_processing/ @home-assistant/core
 /tests/components/image_processing/ @home-assistant/core
 /homeassistant/components/incomfort/ @zxdavb

@@ -2363,6 +2363,12 @@
       "config_flow": false,
       "iot_class": "local_push"
     },
+    "image_annotation": {
+      "name": "Image Annotation Service",
+      "integration_type": "hub",
+      "config_flow": false,
+      "iot_class": "local_push"
+    },
     "imap": {
       "name": "IMAP",
       "integration_type": "hub",

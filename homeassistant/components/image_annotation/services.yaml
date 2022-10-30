@@ -1,0 +1,24 @@
+# Example services.yaml entry
+
+# Service ID
+image_annotation:
+  # Service name as shown in UI
+  name: Annotate Image
+  # Description of the service
+  description: Annotates compresses image formats like jpg, png, etc.
+  # Different fields that your service accepts
+  fields:
+    filename:
+      name: Filename
+      description: Template of a Filename.
+      required: true
+      example: "/tmp/snapshot.jpg"
+      selector:
+        text:
+    annotation:
+      name: Annotation
+      description: Template of text to overlay on the image.
+      required: true
+      example: "/tmp/snapshot_{{ entity_id.name }}.jpg"
+      selector:
+        text:
