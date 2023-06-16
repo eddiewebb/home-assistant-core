@@ -13,6 +13,7 @@ from homeassistant.const import (
     CONF_SENSORS,
     LIGHT_LUX,
     PERCENTAGE,
+    PPM,
     STATE_OK,
     STATE_PROBLEM,
     STATE_UNAVAILABLE,
@@ -43,6 +44,8 @@ from .const import (
     CONF_MIN_CONDUCTIVITY,
     CONF_MIN_MOISTURE,
     CONF_MIN_TEMPERATURE,
+    CONF_MIN_CO2,
+    CONF_MAX_CO2,
     DEFAULT_CHECK_DAYS,
     DEFAULT_MAX_CONDUCTIVITY,
     DEFAULT_MAX_MOISTURE,
@@ -56,6 +59,7 @@ from .const import (
     READING_CONDUCTIVITY,
     READING_MOISTURE,
     READING_TEMPERATURE,
+    READING_CO2,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -65,6 +69,7 @@ CONF_SENSOR_MOISTURE = READING_MOISTURE
 CONF_SENSOR_CONDUCTIVITY = READING_CONDUCTIVITY
 CONF_SENSOR_TEMPERATURE = READING_TEMPERATURE
 CONF_SENSOR_BRIGHTNESS = READING_BRIGHTNESS
+CONF_SENSOR_CO2 = READING_CO2
 
 
 SCHEMA_SENSORS = vol.Schema(
@@ -74,6 +79,7 @@ SCHEMA_SENSORS = vol.Schema(
         vol.Optional(CONF_SENSOR_CONDUCTIVITY): cv.entity_id,
         vol.Optional(CONF_SENSOR_TEMPERATURE): cv.entity_id,
         vol.Optional(CONF_SENSOR_BRIGHTNESS): cv.entity_id,
+        vol.Optional(CONF_SENSOR_CO2): cv.entity_id,
     }
 )
 
@@ -95,6 +101,8 @@ PLANT_SCHEMA = vol.Schema(
         ): cv.positive_int,
         vol.Optional(CONF_MIN_BRIGHTNESS): cv.positive_int,
         vol.Optional(CONF_MAX_BRIGHTNESS): cv.positive_int,
+        vol.Optional(CONF_MIN_CO2): cv.positive_int,
+        vol.Optional(CONF_MAX_CO2): cv.positive_int,
         vol.Optional(CONF_CHECK_DAYS, default=DEFAULT_CHECK_DAYS): cv.positive_int,
     }
 )
@@ -150,6 +158,11 @@ class Plant(Entity):
             "min": CONF_MIN_BRIGHTNESS,
             "max": CONF_MAX_BRIGHTNESS,
         },
+        READING_CO2: {
+            ATTR_UNIT_OF_MEASUREMENT: PPM,
+            "min": CONF_MIN_CO2,
+            "max": CONF_MAX_CO2,
+        },
     }
 
     def __init__(self, name, config):
@@ -168,6 +181,7 @@ class Plant(Entity):
         self._conductivity = None
         self._temperature = None
         self._brightness = None
+        self._co2 = None
         self._problems = PROBLEM_NONE
 
         self._conf_check_days = 3  # default check interval: 3 days
@@ -207,6 +221,10 @@ class Plant(Entity):
             if value != STATE_UNAVAILABLE:
                 value = int(float(value))
             self._conductivity = value
+        elif reading == READING_CO2:
+            if value != STATE_UNAVAILABLE:
+                value = int(float(value))
+            self._co2 = value
         elif reading == READING_BRIGHTNESS:
             if value != STATE_UNAVAILABLE:
                 value = int(float(value))
